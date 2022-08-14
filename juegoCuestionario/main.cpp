@@ -15,12 +15,14 @@ void reporteJugadores();
 void listaMejoresJugadores();
 void salirPrograma();
 
-//Archivos
+//Archivos - jugadores
+void guardarJugadores();
+void cargarJugadores();
+//Archivos - preguntas
 
 //Juego
 void jugar();
 
-//
 
 int main() {
     srand(time(NULL));
