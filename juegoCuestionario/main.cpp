@@ -3,14 +3,15 @@
 #include<ctime>
 #include <conio.h>
 #include <iomanip>
+#include <cctype>
 
 using namespace std;
-
 
 //Menu
 void bienvenida();
 void menuPrincipal();
 void ingresarJugadores();
+int obtenerCedula();
 void reporteJugadores();
 void listaMejoresJugadores();
 void salirPrograma();
@@ -18,16 +19,18 @@ void salirPrograma();
 //Archivos - jugadores
 void guardarJugadores();
 void cargarJugadores();
+
 //Archivos - preguntas
 
 //Juego
 void jugar();
 
+//validaciones
+bool validarCedula(int cedula);
 
 int main() {
     srand(time(NULL));
     menuPrincipal();
-
     return 0;
 }
 
@@ -42,6 +45,7 @@ void menuPrincipal() {
     int opcion = 0;
 
     do {
+        system("cls");
 
         cout<<"Seleccionar(Ingrese el numero de la opcion a elegir) "<<endl;
         cout<<"1. Ingresar jugadores"<<endl;
@@ -86,7 +90,37 @@ void menuPrincipal() {
 }
 
 void ingresarJugadores() {
-    cout<<"Ingresando a Ingresar  Jugadores"<<endl;
+    int noCedula;
+    string nombre;
+    cout<<"Registrarse"<<endl;
+
+    noCedula = obtenerCedula();
+
+    cout<<"Nombre jugador: ";
+    cin>> nombre;
+    cout<<endl;
+}
+
+int obtenerCedula() {
+    string noCedula;
+
+    try {
+        cout<<"Numero de cedula: ";
+        cin>>noCedula;
+        cout<<endl;
+
+        if(0) {
+            throw(1) ;
+        }
+
+    } catch(int x) {
+        cerr<<"ERROR EL NUMERO DE CEDULA ES INCORRECTO,  TIPO DE ERROR "<<x<<endl;
+        obtenerCedula();
+    }
+
+
+
+    return noCedula;
 }
 void reporteJugadores() {
     cout<<"Ingresando a reporte jugadores"<<endl;
