@@ -33,6 +33,8 @@ int obtenerEntero(istream &linea);
 double obtenerFlotante(istream &linea);
 string obtenerHilera(istream &linea);
 
+//mostrar
+
 int main() {
     srand(time(NULL));
     menuPrincipal();
@@ -114,42 +116,42 @@ void ingresarJugadores() {
 
     //opcion = toupper(opcion);
     if(opcion == "s" || opcion == "S") {
-       ingresarJugadores();
+        ingresarJugadores();
     }
 }
 
 void guardarJugadores(int noCedula, string nombre) {
-    if(!validarJugador(noCedula)){
+    if(!validarJugador(noCedula)) {
 
-    try {
-        cout<<"-----Guardando informacion registro Jugadores-----"<<endl;
-        //el ios::app  sirve para abrir un fichero de salida en modo añadir,
-        //de manera que no borra el fichero actual y el cursor del fichero se pone después del último elemento.
-        ofstream os("jugadoresPrueba.txt", ios::out | ios::app);// Creando y abriendo archivo
-        if (!os) {
-            throw exception();
-        } else {
-            os<<noCedula;
-            os<<"-";
-            os<<nombre;
-            os<<"-0"<<endl;
-            os.close();
+        try {
+            cout<<"-----Guardando informacion registro Jugadores-----"<<endl;
+            //el ios::app  sirve para abrir un fichero de salida en modo añadir,
+            //de manera que no borra el fichero actual y el cursor del fichero se pone después del último elemento.
+            ofstream os("jugadoresPrueba.txt", ios::out | ios::app);// Creando y abriendo archivo
+            if (!os) {
+                throw exception();
+            } else {
+                os<<noCedula;
+                os<<"-";
+                os<<nombre;
+                os<<"-0"<<endl;
+                os.close();
+            }
+        } catch(...) {
+            cout << "ERROR :Algo paso con la escritura..." << endl;
         }
-    } catch(...) {
-        cout << "ERROR :Algo paso con la escritura..." << endl;
-    }
 
-    try {
-        ofstream os("registroCedulaJugador.txt", ios::out | ios::app);
-        if (!os) {
-            throw exception();
-        } else {
-            os<<noCedula<<endl;
-            os.close();
+        try {
+            ofstream os("registroCedulaJugador.txt", ios::out | ios::app);
+            if (!os) {
+                throw exception();
+            } else {
+                os<<noCedula<<endl;
+                os.close();
+            }
+        } catch(...) {
+            cout << "ERROR :Algo paso con la escritura..." << endl;
         }
-    } catch(...) {
-        cout << "ERROR :Algo paso con la escritura..." << endl;
-    }
     }
 }
 
@@ -178,8 +180,8 @@ bool validarJugador(int noCedula) {
     }
 
     //comparando si existe la cedula en el registro
-    for(int i = 0; i<100;i++){
-        if(cedulas[i]==noCedula){
+    for(int i = 0; i<100; i++) {
+        if(cedulas[i]==noCedula) {
             return false;
         }
     }
@@ -206,11 +208,11 @@ int obtenerCedula() {
         obtenerCedula();
     }
 
-    try{
-        if(!validarJugador(noCedula)){
+    try {
+        if(!validarJugador(noCedula)) {
             throw(2);
         }
-    }catch(int x){
+    } catch(int x) {
         cerr<<"EL JUGADOR YA EXISTE, TIPO DE ERROR: "<<x<<endl;
         obtenerCedula();
     }
@@ -233,7 +235,7 @@ void reporteJugadores() {
             cout<<"Cedula-Nombre-Puntaje"<<endl;
             while(!is.eof()) {
                 is.getline(linea, sizeof(linea));
-               cout << linea << endl;
+                cout << linea << endl;
 
             }
             is.close();
@@ -243,8 +245,76 @@ void reporteJugadores() {
     }
     system("pause");
 }
+
 void listaMejoresJugadores() {
+    system("cls");
     cout<<"Mostrando los 10 mejores jugadores"<<endl;
+    char linea[125];
+    char delimitador='-';
+    string lectura;
+    int cantidadLinea =0;
+    try {
+        //cout << "------Cargando Informacion Jugadores------" << endl;
+
+        //conocer la cantidad de lineas
+        ifstream s("jugadoresPrueba.txt", ios::in);
+        while(!s.eof()) {
+            s.getline(linea, sizeof(linea));
+            cantidadLinea++;
+        }
+        cout<<"cantidad de lineas: "<<cantidadLinea-1<<endl;
+        s.close();
+
+        ifstream is("jugadoresPrueba.txt", ios::in);
+        if (!is) {
+            throw exception();
+        } else {
+
+            /*
+                https://parzibyte.me/blog/2021/04/15/cpp-separar-cadena-delimitador/
+                el primer while lee la linea, el segundo while separa la informacion
+                segun el delimitador.
+                usamos stringstream para convert un string a stream
+                el getline leera la linea y separara los valores cuando aparezca el delimitador
+            */
+
+
+            string matriz[cantidadLinea-1][3];
+            int contI=0;
+            int contJ=0;
+
+            //este ciclo lee linea por linea
+            while(!is.eof()) {
+                is.getline(linea, sizeof(linea));
+
+                stringstream input_stringstream(linea);
+
+                while(getline(input_stringstream, lectura, delimitador)) {
+                    matriz[contI][contJ]=lectura;
+                    contJ++;
+                }
+                contI++;
+                contJ =0;
+            }
+            is.close();
+
+            cout<<setw(5)<<"Cedula     "<<setw(5)<<"Nombre   "<<setw(5)<<"Puntaje  "<<endl;
+            for(int i=0; i<cantidadLinea; i++) {
+                for(int j=0; j<3; j++) {
+                    cout<<setw(5)<<matriz[i][j] + "  ";
+                }
+                cout<<endl;
+            }
+
+        }
+    } catch(...) {
+        cout << "ERROR: Algo paso " << endl;
+    }
+
+    //Una ves cargado el archivo debemos calcular los 10 mejores resultados
+
+    system("pause");
+
 }
 void salirPrograma() {
     string opcion;
@@ -260,9 +330,6 @@ void salirPrograma() {
 void jugar() {
     cout<<"Jugar"<<endl;
 }
-
-
-
 
 
 
