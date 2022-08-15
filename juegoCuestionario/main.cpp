@@ -35,9 +35,6 @@ string obtenerPregunta(int item);
 bool evaluaRespuesta(int item, string respuesta);
 void mostrarResultados(string *nombre1, string *nombre2,int resultado1,int resultado2);
 
-//validaciones
-int obtenerEntero(istream &linea);
-string obtenerHilera(istream &linea);
 
 
 int main() {
@@ -561,19 +558,3 @@ void mostrarResultados(string *nombre1, string *nombre2,int resultado1,int resul
 }
 
 
-int obtenerEntero(istream &linea) {
-    string s = obtenerHilera(linea);
-    stringstream r(s);
-    int n;
-    if (!(r >> n)) {
-        throw -1;
-    }
-    return n;
-}
-
-
-string obtenerHilera(istream &linea) {
-    string r;
-    getline(linea, r, '\t');
-    return r;
-}
