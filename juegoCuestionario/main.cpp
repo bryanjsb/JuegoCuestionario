@@ -1,10 +1,10 @@
-#include <iostream>
+#include<iostream>
 #include<sstream>
 #include<ctime>
-#include <conio.h>
-#include <iomanip>
-#include <cctype>
-#include <fstream>
+#include<conio.h>
+#include<iomanip>
+#include<cctype>
+#include<fstream>
 
 using namespace std;
 
@@ -27,14 +27,18 @@ bool validarJugador(int noCedula);
 //Juego
 void jugador(string *nombre, int *cedula, int numero);
 void jugar();
+string preguntas[25][3];
+void cargarPreguntas();
+//int listaNumeroAleatorios[25];
+int preguntaAleatoria();
+string obtenerPregunta(int item);
+bool evaluaRespuesta(int item, string respuesta);
+void mostrarResultados(string *nombre1, string *nombre2,int resultado1,int resultado2);
 
-//validaciones
-bool validarCedula(int cedula);
-int obtenerEntero(istream &linea);
-double obtenerFlotante(istream &linea);
-string obtenerHilera(istream &linea);
+
 
 //mostrar
+
 
 int main() {
     srand(time(NULL));
@@ -332,21 +336,72 @@ void salirPrograma() {
 
 void jugar() {
     system("cls");
+
+
     cout<<"Jugar"<<endl;
     //jugador 1
     string nombreJugador1="";
     int cedulaJugador1=0;
+    int asiertosJugador1=0;
+
     //jugador 2
     string nombreJugador2="";
     int cedulaJugador2=0;
+    int asiertosJugador2=0;
 
+    //Reglas del juego
+    int turno = 1;
+    int item=0;
+    string respuesta="";
+    string continuarJuego="";
     //obtener informacion jugadores
     jugador(&nombreJugador1,&cedulaJugador1,1);
     jugador(&nombreJugador2,&cedulaJugador2,2);
 
+    cargarPreguntas();
 
+    do {
+        system("cls");
+        item = preguntaAleatoria();
+        cout<<"Turno: "<<turno<<" de  10"<<endl;
+        cout<<setw(10)<<"Jugador#1----------> Asiertos: "<<asiertosJugador1<<endl<<endl;
 
+        cout<<obtenerPregunta(item)<<endl;
+        cin>>respuesta;
 
+        if(evaluaRespuesta(item, respuesta)) {
+            asiertosJugador1+=100;
+            item = preguntaAleatoria();
+            cout<<"Respuesta Correcta"<<endl;
+        } else {
+            cout<<"Respuesta Inorrecta"<<endl;
+        }
+
+        cout<<setw(10)<<"Jugador#2----------> Asiertos: "<<asiertosJugador2<<endl<<endl;
+        cout<<obtenerPregunta(item)<<endl;
+        cin>>respuesta;
+        if(evaluaRespuesta(item, respuesta)) {
+            asiertosJugador2+=100;
+            cout<<"Respuesta Correcta"<<endl;
+        } else {
+            cout<<"Respuesta Inorrecta"<<endl;
+        }
+
+        cout<<"Desean salir del juego?S/N"<<endl;
+        cin>>continuarJuego;
+
+        if(continuarJuego =="s"||continuarJuego=="S") {
+            mostrarResultados(&nombreJugador1, &nombreJugador2, asiertosJugador1, asiertosJugador2);
+            break;
+        }
+
+        turno++;
+
+    } while(turno <=10);
+
+    if(turno==10) {
+        mostrarResultados(&nombreJugador1, &nombreJugador2, asiertosJugador1, asiertosJugador2);
+    }
 }
 
 
@@ -361,7 +416,7 @@ void jugador(string *nombre,int *cedula, int numero) {
             throw(1);
         }
 
-        if(!validarJugador(*cedula)) {
+        if(validarJugador(*cedula)) {
             throw('3');
         }
 
@@ -385,33 +440,107 @@ void jugador(string *nombre,int *cedula, int numero) {
 
 }
 
+void cargarPreguntas() {
+
+    system("cls");
+
+    char linea[255];
+    char delimitador='-';
+    string lectura;
+
+    try {
+
+        ifstream is("preguntas.txt", ios::in);
+        if (!is) {
+            throw exception();
+        } else {
+            int contI=0;
+            int contJ=0;
+
+            while(!is.eof()) {
+                is.getline(linea, sizeof(linea));
+
+                stringstream input_stringstream(linea);
+
+                while(getline(input_stringstream, lectura, delimitador)) {
+                    preguntas[contI][contJ]=lectura;
+                    contJ++;
+                }
+                contI++;
+                contJ =0;
+            }
+            is.close();
+
+            /*
+            cout<<"Mostrando preguntas"<<endl;
+            cout<<"Item       "<<"Respuesta    "<<"Definicion"<<endl;
+            for(int i=0; i<25; i++) {
+                for(int j=0; j<3; j++) {
+                    cout<<setw(10)<<preguntas[i][j] + "  ";
+                }
+                cout<<endl;
+            }
+            */
+            system("pause");
+
+            //Una ves cargado el archivo debemos calcular los 10 mejores resultados
 
 
+        }
 
-//borrar si no se usa
-int obtenerEntero(istream &linea) {
-    string s = obtenerHilera(linea);
-    stringstream r(s);
-    int n;
-    if (!(r >> n)) {
-        throw -1;
+    } catch(...) {
+        cerr << "ERROR: Algo paso" << endl;
+        system("pause");
     }
-    return n;
+
 }
 
-double obtenerFlotante(istream &linea) {
-    string s = obtenerHilera(linea);
-    stringstream r(s);
-    double x;
-    if (!(r >> x)) {
-        throw -1;
+int preguntaAleatoria() {
+
+    int numero=0;
+    numero = 1 + rand()%25;
+
+    /*
+    creamos un vector para que guarde los numeros que ya sean utiizado, esto para que
+    no se repitan las preguntas.
+
+    for(int i=0; i<25;i++){
+        if(listaNumeroAleatorios[i]==numero){
+            return preguntaAleatoria();
+        }else{
+            listaNumeroAleatorios[i]=numero;
+        }
     }
-    return x;
+     */
+
+    return numero;
 }
 
-string obtenerHilera(istream &linea) {
-    string r;
-    getline(linea, r, '\t');
-    return r;
+string obtenerPregunta(int item) {
+    return preguntas[item-1][2];
 }
+
+bool evaluaRespuesta(int item, string respuesta) {
+    return preguntas[item-1][1] == respuesta;
+}
+
+void mostrarResultados(string *nombre1, string *nombre2,int resultado1,int resultado2) {
+    cout<<"Mostrado resultados"<<endl;
+    if(resultado1 == resultado2) {
+        cout<<"El jugador 1:"<<*nombre1<<" y el jugador 2: "<<*nombre2<<" empatados"<<endl;
+        cout<<"Total de asiertos jugador 1: "<<resultado1<<endl;
+        cout<<"Total de asiertos jugador 2: "<<resultado2<<endl;
+    } else if(resultado1>resultado2) {
+        cout<<"El jugador 1:"<<*nombre1<<" es el ganador"<<endl;
+        cout<<"Total de asiertos jugador 1: "<<resultado1<<endl;
+        cout<<"Total de asiertos jugador 2: "<<resultado2<<endl;
+    } else {
+        cout<<"El jugador 2:"<<*nombre2<<" es el ganador"<<endl;
+        cout<<"Total de asiertos jugador 1: "<<resultado1<<endl;
+        cout<<"Total de asiertos jugador 2: "<<resultado2<<endl;
+    }
+    system("pause");
+}
+
+
 
