@@ -237,7 +237,7 @@ void reporteJugadores() {
             is.close();
         }
     } catch(...) {
-        cout << "ERROR: Algo paso con la lectura... " << endl;
+        cerr << "ERROR: Algo paso con la lectura... " << endl;
     }
     system("pause");
 }
@@ -331,6 +331,8 @@ void salirPrograma() {
 
 void jugar() {
     cout<<"Jugar"<<endl;
+
+
 }
 
 
