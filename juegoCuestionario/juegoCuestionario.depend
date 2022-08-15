@@ -1,9 +1,10 @@
 # depslib dependency file v1.0
-1660504999 source:c:\users\bryan\desktop\juegocuestionario\juegocuestionario\main.cpp
+1660521191 source:c:\users\bryan\desktop\juegocuestionario\juegocuestionario\main.cpp
 	<iostream>
 	<sstream>
 	<ctime>
 	<conio.h>
 	<iomanip>
 	<cctype>
+	<fstream>
 
