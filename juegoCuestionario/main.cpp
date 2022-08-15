@@ -107,6 +107,15 @@ void ingresarJugadores() {
 
     guardarJugadores(noCedula,nombre);
 
+
+    string opcion;
+    cout<<"Desea ingresar otro jugador? S/N"<<endl;
+    cin>>opcion;
+
+    //opcion = toupper(opcion);
+    if(opcion == "s" || opcion == "S") {
+       ingresarJugadores();
+    }
 }
 
 void guardarJugadores(int noCedula, string nombre) {
@@ -183,7 +192,6 @@ int obtenerCedula() {
     // unsigned elimina numero negativos
     // long int tengo mayor rango
     long double noCedula;
-
     try {
         cout<<"Numero de cedula: ";
         cin>>noCedula;
@@ -209,8 +217,31 @@ int obtenerCedula() {
 
     return noCedula;
 }
+
 void reporteJugadores() {
+    system("cls");
     cout<<"Ingresando a reporte jugadores"<<endl;
+    char linea[125];
+
+    try {
+        //cout << "------Cargando Informacion Jugadores------" << endl;
+        ifstream is("jugadoresPrueba.txt", ios::in);
+        if (!is) {
+            throw exception();
+        } else {
+
+            cout<<"Cedula-Nombre-Puntaje"<<endl;
+            while(!is.eof()) {
+                is.getline(linea, sizeof(linea));
+               cout << linea << endl;
+
+            }
+            is.close();
+        }
+    } catch(...) {
+        cout << "ERROR: Algo paso " << endl;
+    }
+    system("pause");
 }
 void listaMejoresJugadores() {
     cout<<"Mostrando los 10 mejores jugadores"<<endl;
