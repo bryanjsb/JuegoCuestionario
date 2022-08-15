@@ -44,6 +44,7 @@ int main() {
 void bienvenida() {
     cout<<"Bienvenido al juego: Que tanto sabes de las partes del cuerpo?"<<endl;
     cout<<"Estudiante: Luiz Mendez"<<endl<<endl<<endl;
+    system("pause");
 }
 
 void menuPrincipal() {
@@ -89,8 +90,6 @@ void menuPrincipal() {
             salirPrograma();
         }
         break;
-
-
         }
 
     } while(opcion != 5);
@@ -114,7 +113,6 @@ void ingresarJugadores() {
     cout<<"Desea ingresar otro jugador? S/N"<<endl;
     cin>>opcion;
 
-    //opcion = toupper(opcion);
     if(opcion == "s" || opcion == "S") {
         ingresarJugadores();
     }
@@ -127,7 +125,7 @@ void guardarJugadores(int noCedula, string nombre) {
             cout<<"-----Guardando informacion registro Jugadores-----"<<endl;
             //el ios::app  sirve para abrir un fichero de salida en modo añadir,
             //de manera que no borra el fichero actual y el cursor del fichero se pone después del último elemento.
-            ofstream os("jugadoresPrueba.txt", ios::out | ios::app);// Creando y abriendo archivo
+            ofstream os("jugadores.txt", ios::out | ios::app);// Creando y abriendo archivo
             if (!os) {
                 throw exception();
             } else {
@@ -138,7 +136,7 @@ void guardarJugadores(int noCedula, string nombre) {
                 os.close();
             }
         } catch(...) {
-            cout << "ERROR :Algo paso con la escritura..." << endl;
+            cerr << "ERROR :Algo paso con la escritura..." << endl;
         }
 
         try {
@@ -150,7 +148,7 @@ void guardarJugadores(int noCedula, string nombre) {
                 os.close();
             }
         } catch(...) {
-            cout << "ERROR :Algo paso con la escritura..." << endl;
+            cerr << "ERROR :Algo paso con la escritura..." << endl;
         }
     }
 }
@@ -159,8 +157,6 @@ bool validarJugador(int noCedula) {
     long double cedulas[100];
 
     try {
-        //cout << "------Cargando Informacion Jugadores------" << endl;
-
         ifstream is("registroCedulaJugador.txt", ios::in);
         if (!is) {
             throw exception();
@@ -176,7 +172,7 @@ bool validarJugador(int noCedula) {
             is.close();
         }
     } catch(...) {
-        cout << "ERROR: Algo paso " << endl;
+        cerr << "ERROR: Algo paso con la lectura..." << endl;
     }
 
     //comparando si existe la cedula en el registro
@@ -227,7 +223,7 @@ void reporteJugadores() {
 
     try {
         //cout << "------Cargando Informacion Jugadores------" << endl;
-        ifstream is("jugadoresPrueba.txt", ios::in);
+        ifstream is("jugadores.txt", ios::in);
         if (!is) {
             throw exception();
         } else {
@@ -241,7 +237,7 @@ void reporteJugadores() {
             is.close();
         }
     } catch(...) {
-        cout << "ERROR: Algo paso " << endl;
+        cout << "ERROR: Algo paso con la lectura... " << endl;
     }
     system("pause");
 }
@@ -257,7 +253,7 @@ void listaMejoresJugadores() {
         //cout << "------Cargando Informacion Jugadores------" << endl;
 
         //conocer la cantidad de lineas
-        ifstream s("jugadoresPrueba.txt", ios::in);
+        ifstream s("jugadores.txt", ios::in);
         while(!s.eof()) {
             s.getline(linea, sizeof(linea));
             cantidadLinea++;
@@ -265,7 +261,7 @@ void listaMejoresJugadores() {
         cout<<"cantidad de lineas: "<<cantidadLinea-1<<endl;
         s.close();
 
-        ifstream is("jugadoresPrueba.txt", ios::in);
+        ifstream is("jugadores.txt", ios::in);
         if (!is) {
             throw exception();
         } else {
@@ -332,6 +328,7 @@ void salirPrograma() {
         cout<<"Guardando Juego"<<endl;
     }
 }
+
 void jugar() {
     cout<<"Jugar"<<endl;
 }
@@ -342,19 +339,7 @@ void jugar() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+//borrar si no se usa
 int obtenerEntero(istream &linea) {
     string s = obtenerHilera(linea);
     stringstream r(s);
