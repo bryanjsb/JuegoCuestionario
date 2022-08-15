@@ -298,22 +298,27 @@ void listaMejoresJugadores() {
             }
             is.close();
 
-            cout<<setw(5)<<"Cedula     "<<setw(5)<<"Nombre   "<<setw(5)<<"Puntaje  "<<endl;
-            for(int i=0; i<cantidadLinea; i++) {
+            cout<<"Cedula       "<<"Nombre    "<<"Puntaje"<<endl;
+            for(int i=0; i<cantidadLinea-1; i++) {
                 for(int j=0; j<3; j++) {
-                    cout<<setw(5)<<matriz[i][j] + "  ";
+                    cout<<setw(10)<<matriz[i][j] + "  ";
                 }
                 cout<<endl;
             }
+            system("pause");
+
+            //Una ves cargado el archivo debemos calcular los 10 mejores resultados
+
 
         }
+
     } catch(...) {
-        cout << "ERROR: Algo paso " << endl;
+        cerr << "ERROR: Algo paso" << endl;
+        system("pause");
     }
 
-    //Una ves cargado el archivo debemos calcular los 10 mejores resultados
 
-    system("pause");
+
 
 }
 void salirPrograma() {
