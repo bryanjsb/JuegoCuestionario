@@ -1,10 +1,10 @@
-#include<iostream>
-#include<sstream>
-#include<ctime>
-#include<conio.h>
-#include<iomanip>
-#include<cctype>
-#include<fstream>
+#include <iostream>
+#include <sstream>
+#include <ctime>
+#include <conio.h>
+#include <iomanip>
+#include <cctype>
+#include <fstream>
 
 using namespace std;
 
@@ -35,9 +35,9 @@ string obtenerPregunta(int item);
 bool evaluaRespuesta(int item, string respuesta);
 void mostrarResultados(string *nombre1, string *nombre2,int resultado1,int resultado2);
 
-
-
-//mostrar
+//validaciones
+int obtenerEntero(istream &linea);
+string obtenerHilera(istream &linea);
 
 
 int main() {
@@ -249,7 +249,7 @@ void reporteJugadores() {
 
 void listaMejoresJugadores() {
     system("cls");
-    cout<<"Mostrando los 10 mejores jugadores"<<endl;
+    cout<<"Mostrando los 10 mejores jugadores"<<endl<<endl;
     char linea[125];
     char delimitador='-';
     string lectura;
@@ -263,7 +263,7 @@ void listaMejoresJugadores() {
             s.getline(linea, sizeof(linea));
             cantidadLinea++;
         }
-        cout<<"cantidad de lineas: "<<cantidadLinea-1<<endl;
+        //cout<<"cantidad de lineas: "<<cantidadLinea-1<<endl;
         s.close();
 
         ifstream is("jugadores.txt", ios::in);
@@ -299,27 +299,45 @@ void listaMejoresJugadores() {
             }
             is.close();
 
-            cout<<"Cedula       "<<"Nombre    "<<"Puntaje"<<endl;
-            for(int i=0; i<cantidadLinea-1; i++) {
+            /*Una ves cargado el archivo debemos calcular los 10 mejores resultados */
+            string mejores10[10][3];
+            int posicion = 0;
+            int aux = 0;
+            int numero =0;
+            for(int i=0; i<10; i++) {
+
+                for(int j=0; j<cantidadLinea-1; j++) {
+                    numero = stoi(matriz[j][2]);
+                    if(numero>aux) {
+                        aux = numero;
+                        posicion=j;
+                    }
+
+                }
+
                 for(int j=0; j<3; j++) {
-                    cout<<setw(10)<<matriz[i][j] + "  ";
+                    mejores10[i][j]=matriz[posicion][j];
+                }
+
+                matriz[posicion][2]="0";
+                aux = 0;
+            }
+
+
+            cout<<"Cedula       "<<"Nombre    "<<"Puntaje"<<endl;
+            for(int i=0; i<10; i++) {
+                for(int j=0; j<3; j++) {
+                    cout<<setw(10)<<mejores10[i][j] + "  ";
                 }
                 cout<<endl;
             }
             system("pause");
-
-            //Una ves cargado el archivo debemos calcular los 10 mejores resultados
-
-
         }
 
     } catch(...) {
         cerr << "ERROR: Algo paso" << endl;
         system("pause");
     }
-
-
-
 
 }
 void salirPrograma() {
@@ -543,4 +561,19 @@ void mostrarResultados(string *nombre1, string *nombre2,int resultado1,int resul
 }
 
 
+int obtenerEntero(istream &linea) {
+    string s = obtenerHilera(linea);
+    stringstream r(s);
+    int n;
+    if (!(r >> n)) {
+        throw -1;
+    }
+    return n;
+}
 
+
+string obtenerHilera(istream &linea) {
+    string r;
+    getline(linea, r, '\t');
+    return r;
+}
