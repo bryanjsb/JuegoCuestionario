@@ -18,13 +18,14 @@ void listaMejoresJugadores();
 void salirPrograma();
 
 //Archivos - jugadores
-void guardarJugadores(int noCedula, string nombre);
+void guardarJugadores(int noCedula,string nombre);
 void cargarJugadores();
 bool validarJugador(int noCedula);
 
 //Archivos - preguntas
 
 //Juego
+void jugador(string *nombre, int *cedula, int numero);
 void jugar();
 
 //validaciones
@@ -330,13 +331,59 @@ void salirPrograma() {
 }
 
 void jugar() {
+    system("cls");
     cout<<"Jugar"<<endl;
+    //jugador 1
+    string nombreJugador1="";
+    int cedulaJugador1=0;
+    //jugador 2
+    string nombreJugador2="";
+    int cedulaJugador2=0;
+
+    //obtener informacion jugadores
+    jugador(&nombreJugador1,&cedulaJugador1,1);
+    jugador(&nombreJugador2,&cedulaJugador2,2);
+
+
 
 
 }
 
 
+void jugador(string *nombre,int *cedula, int numero) {
+    int opcion=0;
 
+    try {
+        cout<<"Ingrese el numero de cedula del jugador "<<numero<<endl;
+        cin>>*cedula;
+
+        if(!(*cedula>=100000000 && *cedula<=999999999)) {
+            throw(1);
+        }
+
+        if(!validarJugador(*cedula)) {
+            throw('3');
+        }
+
+    } catch(int x) {
+        cerr<<"ERROR EL NUMERO DE CEDULA ES INCORRECTO,  TIPO DE ERROR: "<<x<<endl;
+        jugador(nombre,cedula,numero);
+    } catch(char x) {
+        cerr<<"ERROR EL JUGADOR NO SE ENCUENTRA REGISTRADO, TIPO DE ERROR: "<<x<<endl;
+        cout<<"1. Ir a menu principal?"<<endl;
+        cout<<"2. Intentar de nuevo"<<endl;
+
+        cin>>opcion;
+        if(opcion == 1) {
+            menuPrincipal();
+        } else if(opcion ==2) {
+            jugador(nombre,cedula,numero);
+        }
+    }
+
+
+
+}
 
 
 
